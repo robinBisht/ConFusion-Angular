@@ -8,14 +8,20 @@ import {LEADERS} from '../shared/leaders';
 export class LeaderService {
 
   constructor() { }
-  getLeaders():leader[]{
-    return LEADERS;
+  getLeaders():Promise<leader[]>{
+    return new Promise(resolve=>{
+      setTimeout(()=>resolve(LEADERS),2000)
+    });
   }
-  getLeader(id:string):leader{
-    return LEADERS.filter((Leader)=>(Leader.id===id))[0];
+  getLeader(id:string):Promise<leader>{
+    return new Promise(resolve=>{
+      setTimeout(()=>resolve(LEADERS.filter((Leader)=>(Leader.id===id))[0]),2000)
+    });
   }
-  getFeaturedLeader():leader{
-    return LEADERS.filter((Leader)=>(Leader.featured))[0];
+  getFeaturedLeader():Promise<leader>{
+    return new Promise(resolve=>{
+      setTimeout(()=>resolve(LEADERS.filter((Leader)=>(Leader.featured))[0]),2000)
+    });
   }
 
 }
