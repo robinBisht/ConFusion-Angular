@@ -23,10 +23,12 @@
 
     </div>
 
+    <div matLine></div>
+
   <div fxFlex="40">
     <div *ngIf="dish">
     <mat-card>
-      <mat-card-header> {{dish.name}} </mat-card-header>
+      <mat-card-header> {{dish.name|uppercase}} </mat-card-header>
       <img src="{{dish.image}}" alt="IMAGE" mat-card-image>
       <mat-card-content>
         <p>{{dish.description}}</p>
@@ -49,16 +51,43 @@
 
   
   <div fxFlex="40" *ngIf="dish">
-    
+    <h2>Comments</h2>
     <mat-list>
-        <h2>Comments</h2>
+        
       <mat-list-item *ngFor="let comment of dish.comments">
         <p matLine>{{comment.comment}}</p> 
         <p matLine> {{comment.rating}} Star </p> 
         <p matLine> <span> --{{comment.author}}  {{comment.date | date}} </span> </p>
       </mat-list-item>
-    </mat-list>
 
+      <mat-list-item *ngIf="commentForm.valid">
+        <p matLine> {{commentForm.comment}} </p>
+        <p matLine> {{commentForm.rating}} </p>
+        <p matLine> --{{commentForm.author}} </p>
+      </mat-list-item>
+    </mat-list>
+    
+    <form novalidate [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput type="text" placeholder="Name" formControlName="author" required [(ngModel)]="commentForm.author">
+        <mat-error *ngIf="formError.author">{{formError.author}}</mat-error>
+      </mat-form-field>
+
+      <div matLine></div>
+
+      
+        <mat-slider thumbLabel tickInterval="1" max="5" min="0" value="5" formControlName="rating" [(ngModel)]="commentForm.rating"></mat-slider>
+        <mat-error *ngIf="formError.rating">{{formError.rating}}</mat-error>
+      
+      <div matLine></div>
+
+      <mat-form-field class="full-width">
+        <textarea type="text" matInput placeholder="Comment" formControlName="comment" rows=12 required [(ngModel)]="commentForm.comment"></textarea>
+      </mat-form-field>
+
+      <div matLine></div>
+      <button mat-flat-button color="primary" [disabled]="!commentForm.valid"> Submit</button>
+    </form>
     
   </div>
   <div fxFlex [hidden]="dish">
