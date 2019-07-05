@@ -26,7 +26,7 @@
     <div matLine></div>
 
   <div fxFlex="40">
-    <div *ngIf="dish">
+    <div *ngIf="dish" [@visibility]='visibility'>
     <mat-card>
       <mat-card-header> {{dish.name|uppercase}} </mat-card-header>
       <img src="{{dish.image}}" alt="IMAGE" mat-card-image>
@@ -50,7 +50,7 @@
   </div>
 
   
-  <div fxFlex="40" *ngIf="dish">
+  <div fxFlex="40" *ngIf="dish" [@visibility]='visibility' [@expand]>
     <h2>Comments</h2>
     <mat-list>
         

@@ -7,12 +7,17 @@ import {Comment} from '../shared/comment';
 import {FormBuilder,FormGroup,Validators} from '@angular/forms';
 import {switchMap} from 'rxjs/operators';
 import { Feedback } from '../shared/feedback';
-// import { from } from 'rxjs';
+import {visibility,flyInOut,expand} from '../animations/app.animation';
 
 @Component({
   selector: 'app-dish-detail',
   templateUrl: './dish-detail.component.html',
-  styleUrls: ['./dish-detail.component.scss']
+  styleUrls: ['./dish-detail.component.scss'],
+  host:{
+    '[@flyInOut]':'true',
+    'style':'display:block'
+  },
+  animations:[flyInOut(),visibility(),expand()]
 })
 export class DishDetailComponent implements OnInit {
   
@@ -23,6 +28,7 @@ export class DishDetailComponent implements OnInit {
   comment:Comment;
   feedback:Feedback;
   commentForm:FormGroup;
+  visibility='shown';
 
   formError = {
     'author':'',
@@ -53,8 +59,8 @@ export class DishDetailComponent implements OnInit {
 
 
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-    this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+    this.route.params.pipe(switchMap((params: Params) => {this.visibility = 'hidden';return this.dishservice.getDish(params['id']);}))
+    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); this.visibility='shown'; });
   }
 
   createForm(){
