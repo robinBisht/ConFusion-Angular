@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,Inject } from '@angular/core';
 import {Dish} from '../shared/dish';
 import {DishService} from '../services/dish.service';
 import {Params,ActivatedRoute} from '@angular/router';
@@ -29,6 +29,7 @@ export class DishDetailComponent implements OnInit {
   feedback:Feedback;
   commentForm:FormGroup;
   visibility='shown';
+  errMess:string;
 
   formError = {
     'author':'',
@@ -52,13 +53,16 @@ export class DishDetailComponent implements OnInit {
     }
   }
 
-  constructor(private dishservice:DishService, private route:ActivatedRoute, private location:Location, private fb:FormBuilder) { }
+  constructor(private dishservice:DishService, private route:ActivatedRoute,
+     private location:Location, private fb:FormBuilder,
+     @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
     this.createForm();
 
 
-    this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
+    this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds,
+      errmess => this.errMess = <any>errmess);
     this.route.params.pipe(switchMap((params: Params) => {this.visibility = 'hidden';return this.dishservice.getDish(params['id']);}))
     .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); this.visibility='shown'; });
   }

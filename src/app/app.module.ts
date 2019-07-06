@@ -17,7 +17,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
-
+import {HttpClientModule} from '@angular/common/http';
 
 import 'hammerjs';
 
@@ -36,6 +36,7 @@ import { HomeComponent } from './home/home.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { HighlightDirective } from './directives/highlight.directive';
+import {baseURL} from './shared/baseurl';
 // import { HighlightsDirective } from './directives/highlights.directive';
 
 
@@ -72,12 +73,14 @@ import { HighlightDirective } from './directives/highlight.directive';
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   entryComponents: [
     LoginComponent
   ],
-  providers: [DishService,PromotionService,LeaderService],
+  providers: [DishService,PromotionService,LeaderService,
+  {provide:'BaseURL',useValue:baseURL}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

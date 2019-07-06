@@ -29,7 +29,7 @@
     <div *ngIf="dish" [@visibility]='visibility'>
     <mat-card>
       <mat-card-header> {{dish.name|uppercase}} </mat-card-header>
-      <img src="{{dish.image}}" alt="IMAGE" mat-card-image>
+      <img src="{{BaseURL+dish.image}}" alt="IMAGE" mat-card-image>
       <mat-card-content>
         <p>{{dish.description}}</p>
       </mat-card-content>
@@ -90,8 +90,12 @@
     </form>
     
   </div>
-  <div fxFlex [hidden]="dish">
+  <div fxFlex [hidden]="dish || errMess ">
       <mat-spinner></mat-spinner> <h4>Loading ........... Please Wait</h4>
     </div>
-  
+  <div fxFlex *ngIf="errMess">
+    <h2>Error</h2>
+    <h4>{{errMess}}</h4>
+  </div>
+
 </div>
