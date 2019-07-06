@@ -23,6 +23,7 @@ export class DishDetailComponent implements OnInit {
   
   dish:Dish;
   dishIds:string[];
+  dishcopy:Dish;
   prev:string;
   next:string;
   comment:Comment;
@@ -60,11 +61,10 @@ export class DishDetailComponent implements OnInit {
   ngOnInit() {
     this.createForm();
 
-
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds,
       errmess => this.errMess = <any>errmess);
     this.route.params.pipe(switchMap((params: Params) => {this.visibility = 'hidden';return this.dishservice.getDish(params['id']);}))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); this.visibility='shown'; });
+    .subscribe(dish => { this.dish = dish; this.dishcopy=dish ;this.setPrevNext(dish.id); this.visibility='shown'; });
   }
 
   createForm(){
@@ -109,9 +109,13 @@ export class DishDetailComponent implements OnInit {
 
   onSubmit(){
     
-      console.log(this.comment);
       this.comment['date'] = new Date().toISOString();
-      this.dish.comments.push(this.comment);
+      this.dishcopy.comments.push(this.comment);
+    this.dishservice.putDish(this.dishcopy)
+      .subscribe(dish => {
+        this.dish = dish; this.dishcopy = dish;
+      },
+      errmess => { this.dish = null; this.dishcopy = null; this.errMess = <any>errmess; });
       this.commentForm.reset({
       name:'',
       ratings:5,
